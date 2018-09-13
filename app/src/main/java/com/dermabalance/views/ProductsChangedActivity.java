@@ -8,6 +8,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.Toast;
 
 import com.dermabalance.R;
 import com.dermabalance.adapters.ProductChangedAdapter;
@@ -19,8 +20,6 @@ import com.dermabalance.utils.ProgressDialogUtils;
 import java.util.List;
 
 public class ProductsChangedActivity extends AppCompatActivity implements Changer.View {
-
-    private static final String ARG_PARAM_PROD = "param_prod";
 
     private List<Product> products;
 
@@ -79,7 +78,8 @@ public class ProductsChangedActivity extends AppCompatActivity implements Change
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                ProgressDialogUtils.show(ProductsChangedActivity.this);
+                presenter.updateProduct(products.get(mPager.getCurrentItem()));
             }
         });
 
@@ -99,5 +99,19 @@ public class ProductsChangedActivity extends AppCompatActivity implements Change
         }
 
         ProgressDialogUtils.dismiss();
+        Toast.makeText(this, getString(R.string.file_readed_no_changes), Toast.LENGTH_LONG).show();
+        finish();
+    }
+
+    @Override
+    public void productUpdated(final List<Product> products) {
+        ProgressDialogUtils.dismiss();
+        this.products = products;
+        if (products != null && products.size() > 0) {
+            ProductsChangedActivity.start(this);
+            finish();
+        } else {
+            finish();
+        }
     }
 }

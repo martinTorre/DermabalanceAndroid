@@ -19,11 +19,26 @@ public class ChangerPresenter implements Changer.Presenter {
 
     @Override
     public void getProductsChanged() {
-        model.getProductsChanged();
+        model.getProductsChanged(false);
     }
 
     @Override
-    public void productsGot(List<Product> products) {
-        view.productsGot(products);
+    public void productsGot(final List<Product> products, final boolean wasUpdated) {
+        if (wasUpdated) {
+            view.productUpdated(products);
+        } else {
+            view.productsGot(products);
+        }
+    }
+
+    @Override
+    public void updateProduct(final Product product) {
+        product.setChanged(0);
+        model.updateProduct(product);
+    }
+
+    @Override
+    public void productUpdated() {
+        model.getProductsChanged(true);
     }
 }
