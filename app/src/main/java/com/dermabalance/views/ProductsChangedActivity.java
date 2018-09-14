@@ -111,7 +111,7 @@ public class ProductsChangedActivity extends AppCompatActivity implements Change
     }
 
     private void handlePosition(final int position) {
-        if (products != null) {
+        if (product != null) {
             getSupportActionBar().setTitle(product.getBarcode() + "");
         } else {
             getSupportActionBar().setTitle((position + 1) + " de " + products.size());
