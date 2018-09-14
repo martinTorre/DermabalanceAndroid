@@ -19,7 +19,9 @@
     <string name="last_price">Precio anterior:</string>
     <string name="difference">Diferencia:</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
+    <string name="search_fields">Nombre</string>
+
     <string name="title_activity_products_changed">Nuevos precios</string>
     <string name="calculate">Calcular</string>
+    <string name="no_product_found">Sin resultados</string>
 </resources>

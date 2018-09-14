@@ -44,8 +44,39 @@ public class ReaderModel implements Reader.Model {
     }
 
     @Override
-    public Product getByBarcode(final String barcode) {
+    public Product getProduct(final String barcode) {
         return productDao.getByBarcode(barcode);
+    }
+
+    @Override
+    public void getProductsLike(String barcode) {
+        new GetProductsLikeTask(barcode).execute();
+    }
+
+    @Override
+    public void getProductByBarcode(final String barcode) {
+        new GetProductByBarcodeTask(barcode).execute();
+    }
+
+    class GetProductsLikeTask extends AsyncTask<Void, Void, Void> {
+
+        private String barcode;
+        private List<Product> products;
+
+        public GetProductsLikeTask(final String barcode) {
+            this.barcode = barcode;
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            products = productDao.getByDescriptionLike(barcode);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            presenter.productsLikeGot(products);
+        }
     }
 
     class GetProductsTask extends AsyncTask<Void, Void, Void> {
@@ -83,6 +114,28 @@ public class ReaderModel implements Reader.Model {
         @Override
         protected void onPostExecute(Void result) {
             presenter.productsGot(products);
+        }
+    }
+
+    class GetProductByBarcodeTask extends AsyncTask<Void, Void, Void> {
+
+        private Product product;
+
+        private String barcode;
+
+        public GetProductByBarcodeTask(final String barcode) {
+            this.barcode = barcode;
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            product = productDao.getByBarcode(barcode);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            presenter.productGot(product);
         }
     }
 }

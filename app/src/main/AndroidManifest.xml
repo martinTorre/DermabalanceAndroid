@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:name=".DermaApplication"
@@ -30,7 +31,10 @@
         </activity>
         <activity android:name=".views.MainActivity"
             android:theme="@style/AppThemeNoStatusBar"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden"/>
+        <activity android:name=".views.BarcodeScannerActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".views.ProductsChangedActivity"
             android:label="@string/title_activity_products_changed"

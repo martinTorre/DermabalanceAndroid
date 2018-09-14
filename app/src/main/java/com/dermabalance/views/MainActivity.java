@@ -1,5 +1,6 @@
 package com.dermabalance.views;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.DrawerLayout;
@@ -7,8 +8,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.dermabalance.R;
@@ -31,7 +35,11 @@ public class MainActivity extends AppCompatActivity implements Reader.View {
 
     private TextView textViewInfo;
 
+    private EditText editTextBarcode;
+
     private DrawerLayout drawerLayout;
+
+    private List<Product> products;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +48,7 @@ public class MainActivity extends AppCompatActivity implements Reader.View {
 
         createToolbar();
         initUI();
+        setListeners();
 
         ProgressDialogUtils.show(this);
         presenter = new ReaderPresenter(this);
@@ -53,6 +62,7 @@ public class MainActivity extends AppCompatActivity implements Reader.View {
         recyclerView = findViewById(R.id.recyclerView);
         textViewInfo = findViewById(R.id.textview_info);
         drawerLayout = findViewById(R.id.drawer_layout);
+        editTextBarcode = findViewById(R.id.barcode);
 
         //Init list
         recyclerView.setHasFixedSize(true);
@@ -60,9 +70,33 @@ public class MainActivity extends AppCompatActivity implements Reader.View {
         recyclerView.setLayoutManager(layoutManager);
     }
 
+    private void setListeners() {
+        editTextBarcode.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                if (s.toString().isEmpty() && products != null) {
+                    adapter.update(products);
+                } else {
+                    adapter.getFilter().filter(s.toString());
+                }
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+    }
+
     @Override
     public void showProducts(final List<Product> products) {
         if (products != null && products.size() > 0) {
+            this.products = products;
             recyclerView.setVisibility(View.VISIBLE);
             adapter = new ProductsAdapter(products, MainActivity.this);
             recyclerView.setAdapter(adapter);
@@ -102,6 +136,23 @@ public class MainActivity extends AppCompatActivity implements Reader.View {
     }
 
     @Override
+    public void productsLikeGot(final List<Product> products) {
+
+    }
+
+    @Override
+    public void productGot(final Product product) {
+        ProgressDialogUtils.dismiss();
+        if (product != null) {
+            ProductsChangedActivity.start(this, product);
+        } else {
+            final Snackbar snackbar = Snackbar
+                    .make(recyclerView, getString(R.string.no_product_found), Snackbar.LENGTH_LONG);
+            snackbar.show();
+        }
+    }
+
+    @Override
     public boolean onSupportNavigateUp() {
         drawerLayout.openDrawer(Gravity.LEFT);
         return true;
@@ -115,6 +166,28 @@ public class MainActivity extends AppCompatActivity implements Reader.View {
     }
 
     public void goToNewPrices(final View view) {
-        ProductsChangedActivity.start(this);
+        ProductsChangedActivity.start(this, null);
+    }
+
+    public void scan(final View view) {
+        startActivityForResult(new Intent(this, BarcodeScannerActivity.class), BarcodeScannerActivity.REQUEST_CODE);
+    }
+
+    @Override
+    protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
+        // Check which request we're responding to
+        if (requestCode == BarcodeScannerActivity.REQUEST_CODE) {
+            // Make sure the request was successful
+            if (resultCode == RESULT_OK) {
+                ProgressDialogUtils.show(this);
+                try {
+                    presenter.getProduct(data.getStringExtra(BarcodeScannerActivity.EXTRA_KEY));
+                } catch (final Exception e) {
+                    e.printStackTrace();
+                }
+            } else if (resultCode == BarcodeScannerActivity.RESULT_ACCEPTED_PERMISSION) {
+                startActivityForResult(new Intent(this, BarcodeScannerActivity.class), BarcodeScannerActivity.REQUEST_CODE);
+            }
+        }
     }
 }

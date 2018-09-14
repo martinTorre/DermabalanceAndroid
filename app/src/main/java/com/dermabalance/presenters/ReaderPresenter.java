@@ -41,6 +41,16 @@ public class ReaderPresenter implements Reader.Presenter {
     }
 
     @Override
+    public void getProducts(String description) {
+        model.getProductsLike("%" + description + "%");
+    }
+
+    @Override
+    public void productsLikeGot(List<Product> products) {
+        view.productsLikeGot(products);
+    }
+
+    @Override
     public void getProducts() {
         model.getProducts();
     }
@@ -53,6 +63,16 @@ public class ReaderPresenter implements Reader.Presenter {
     @Override
     public void readExcelData(final int type) {
         new ReadFileTask(type).execute();
+    }
+
+    @Override
+    public void getProduct(final String barcode) {
+        model.getProductByBarcode(barcode);
+    }
+
+    @Override
+    public void productGot(final Product product) {
+        view.productGot(product);
     }
 
     /**
@@ -189,7 +209,7 @@ public class ReaderPresenter implements Reader.Presenter {
         @Override
         protected Void doInBackground(Void... voids) {
             for (Product product : productsFromExcel) {
-                final Product productDb = model.getByBarcode(product.getBarcode());
+                final Product productDb = model.getProduct(product.getBarcode());
                 final double newPrice = product.getPrice();
                 if (productDb != null) {
                     final double initialPrice = productDb.getPrice();

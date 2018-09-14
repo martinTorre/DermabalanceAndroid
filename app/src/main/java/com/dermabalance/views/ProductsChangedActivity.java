@@ -17,9 +17,13 @@ import com.dermabalance.interfaces.Changer;
 import com.dermabalance.presenters.ChangerPresenter;
 import com.dermabalance.utils.ProgressDialogUtils;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ProductsChangedActivity extends AppCompatActivity implements Changer.View {
+
+    private static final String ARG_PARAM_PROD = "arg_prod";
 
     private List<Product> products;
 
@@ -30,6 +34,8 @@ public class ProductsChangedActivity extends AppCompatActivity implements Change
     private FloatingActionButton fab;
 
     private Changer.Presenter presenter;
+
+    private Product product;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,8 +48,22 @@ public class ProductsChangedActivity extends AppCompatActivity implements Change
         bindListeners();
         presenter = new ChangerPresenter(this);
 
-        ProgressDialogUtils.show(this);
-        presenter.getProductsChanged();
+        product = (Product) getIntent().getSerializableExtra(ARG_PARAM_PROD);
+        if (product != null) {
+            products = new ArrayList<>();
+            products.add(product);
+            productsGot(products);
+            handlePosition(0);
+        } else {
+            ProgressDialogUtils.show(this);
+            presenter.getProductsChanged();
+        }
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
     }
 
     private void initUI() {
@@ -51,8 +71,9 @@ public class ProductsChangedActivity extends AppCompatActivity implements Change
         mPager = findViewById(R.id.pager);
     }
 
-    public static void start(final Context context) {
+    public static void start(final Context context, final Product product) {
         final Intent intent = new Intent(context, ProductsChangedActivity.class);
+        intent.putExtra(ARG_PARAM_PROD, (Serializable) product);
         context.startActivity(intent);
     }
 
@@ -78,29 +99,37 @@ public class ProductsChangedActivity extends AppCompatActivity implements Change
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ProgressDialogUtils.show(ProductsChangedActivity.this);
-                presenter.updateProduct(products.get(mPager.getCurrentItem()));
+                if (product != null) {
+                    finish();
+                } else {
+                    ProgressDialogUtils.show(ProductsChangedActivity.this);
+                    presenter.updateProduct(products.get(mPager.getCurrentItem()));
+                }
             }
         });
 
     }
 
     private void handlePosition(final int position) {
-        getSupportActionBar().setTitle((position + 1) + " de " + products.size());
+        if (products != null) {
+            getSupportActionBar().setTitle(product.getBarcode() + "");
+        } else {
+            getSupportActionBar().setTitle((position + 1) + " de " + products.size());
+        }
     }
 
     @Override
     public void productsGot(List<Product> products) {
+        ProgressDialogUtils.dismiss();
         if (products != null && products.size() > 0) {
             this.products = products;
             adapter = new ProductChangedAdapter(getSupportFragmentManager(), products);
             mPager.setAdapter(adapter);
             handlePosition(0);
+        } else {
+            Toast.makeText(this, getString(R.string.file_readed_no_changes), Toast.LENGTH_LONG).show();
+            finish();
         }
-
-        ProgressDialogUtils.dismiss();
-        Toast.makeText(this, getString(R.string.file_readed_no_changes), Toast.LENGTH_LONG).show();
-        finish();
     }
 
     @Override
@@ -108,7 +137,7 @@ public class ProductsChangedActivity extends AppCompatActivity implements Change
         ProgressDialogUtils.dismiss();
         this.products = products;
         if (products != null && products.size() > 0) {
-            ProductsChangedActivity.start(this);
+            ProductsChangedActivity.start(this, null);
             finish();
         } else {
             finish();

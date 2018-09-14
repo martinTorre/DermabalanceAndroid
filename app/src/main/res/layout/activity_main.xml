@@ -33,6 +33,29 @@
 
             </android.support.design.widget.AppBarLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:gravity="center_vertical">
+
+                <EditText
+                    android:id="@+id/barcode"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.8"
+                    android:hint="@string/search_fields"
+                    android:padding="10dp"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_scan"
+                    android:padding="10dp"
+                    android:onClick="scan"/>
+
+            </LinearLayout>
+
             <TextView
                 android:id="@+id/textview_info"
                 android:layout_width="match_parent"

@@ -6,19 +6,26 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 
 import com.dermabalance.R;
 import com.dermabalance.data.Product;
+import com.dermabalance.interfaces.Reader;
+import com.dermabalance.presenters.ReaderPresenter;
+import com.dermabalance.views.ProductsChangedActivity;
 
 import java.util.List;
 
-public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHolder> {
+public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHolder> implements Filterable, Reader.View{
 
     /**Order list.*/
     private List<Product> productList;
 
     private Context context;
+
+    private Reader.Presenter presenter;
 
     /**
      * Constructor.
@@ -27,6 +34,7 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
     public ProductsAdapter(final List<Product> productList, final Context context) {
         this.productList = productList;
         this.context = context;
+        presenter = new ReaderPresenter(this);
     }
 
     @Override
@@ -48,12 +56,83 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
             }
             holder.textViewBarcode.setText(product.getBarcode() + "");
             holder.textViewDescription.setText(product.getDescription() + "");
+
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ProductsChangedActivity.start(context, product);
+                }
+            });
         }
     }
 
     @Override
     public int getItemCount() {
         return productList != null ? productList.size() : 0;
+    }
+
+    @Override
+    public Filter getFilter() {
+        Filter filter = new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                FilterResults results = new FilterResults();
+                // Skip the autocomplete query if no constraints are given.
+                if (constraint != null) {
+                    // Query the autocomplete API for the (constraint) search string.
+                    presenter.getProducts(constraint.toString());
+                    if (productList != null) {
+                        // The API successfully returned results.
+                        results.values = productList;
+                        results.count = productList.size();
+                    }
+                }
+                return results;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                if (results != null && results.count > 0) {
+                    // The API returned at least one result, update the data.
+                    notifyDataSetChanged();
+                } else {
+                    // The API did not return any results, invalidate the data set.
+                    //notifyDataSetInvalidated();
+                }
+            }
+        };
+        return filter;
+    }
+
+    public void update(final List<Product> productList) {
+        this.productList = productList;
+        notifyDataSetChanged();
+    }
+
+    @Override
+    public void showProducts(List<Product> products) {
+
+    }
+
+    @Override
+    public void showNoFile(boolean showText) {
+
+    }
+
+    @Override
+    public void showChanges(List<Product> products) {
+
+    }
+
+    @Override
+    public void productsLikeGot(List<Product> products) {
+        this.productList = products;
+        notifyDataSetChanged();
+    }
+
+    @Override
+    public void productGot(Product product) {
+
     }
 
     /**

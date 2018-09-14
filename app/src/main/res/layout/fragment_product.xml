@@ -88,6 +88,7 @@
     </RelativeLayout>
 
     <Button
+        android:id="@+id/calculate"
         style="@style/Widget.MaterialComponents.Button"
         android:textSize="15sp"
         android:layout_width="match_parent"

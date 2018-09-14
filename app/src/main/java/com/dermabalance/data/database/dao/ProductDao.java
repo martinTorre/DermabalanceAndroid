@@ -23,6 +23,9 @@ public interface ProductDao {
     @Query("SELECT * FROM products WHERE barcode = :barcode LIMIT 1")
     Product getByBarcode(String barcode);
 
+    @Query("SELECT * FROM products WHERE description like:description")
+    List<Product> getByDescriptionLike(String description);
+
     @Query("SELECT * FROM products WHERE changed = 1")
     List<Product> getChanged();
 }
