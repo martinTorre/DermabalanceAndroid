@@ -45,6 +45,8 @@ public class MainActivity extends AppCompatActivity implements Reader.View {
 
     private List<Product> products;
 
+    private boolean isThereProducts;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,10 +80,12 @@ public class MainActivity extends AppCompatActivity implements Reader.View {
         editTextBarcode.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                if (s.toString().isEmpty() && products != null) {
-                    adapter.update(products);
-                } else {
-                    adapter.getFilter().filter(s.toString());
+                if (adapter != null) {
+                    if (s.toString().isEmpty() && products != null) {
+                        adapter.update(products);
+                    } else {
+                        adapter.getFilter().filter(s.toString());
+                    }
                 }
             }
 
@@ -105,18 +109,17 @@ public class MainActivity extends AppCompatActivity implements Reader.View {
             adapter = new ProductsAdapter(products, MainActivity.this);
             recyclerView.setAdapter(adapter);
             textViewInfo.setVisibility(View.GONE);
-            ProgressDialogUtils.dismiss();
             final Snackbar snackbar = Snackbar
                     .make(recyclerView, products.size() + " " + getString(R.string.products), Snackbar.LENGTH_LONG);
             snackbar.show();
 
-            ProgressDialogUtils.show(this);
-            presenter.readExcelData(ReaderPresenter.UPDATE, null);
+            isThereProducts = true;
 
         } else {
             textViewInfo.setVisibility(View.VISIBLE);
-            presenter.readExcelData(ReaderPresenter.INSERT, null);
         }
+
+        ProgressDialogUtils.dismiss();
     }
 
     @Override
@@ -196,7 +199,7 @@ public class MainActivity extends AppCompatActivity implements Reader.View {
             if (resultCode == RESULT_OK) {
                 final Uri uri = data.getData();
                 ProgressDialogUtils.show(this);
-                presenter.readExcelData(ReaderPresenter.UPDATE, uri);
+                presenter.readExcelData(isThereProducts ? ReaderPresenter.UPDATE : ReaderPresenter.INSERT, uri);
             }
         }
     }

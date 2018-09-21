@@ -182,7 +182,6 @@ public class ReaderPresenter implements Reader.Presenter {
                     }
                 }
 
-                inputFile.delete();
                 return true;
 
             } catch (final Exception e) {

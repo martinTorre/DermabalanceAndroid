@@ -9,7 +9,6 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 
 import com.dermabalance.R;
-import com.dermabalance.utils.FileUtils;
 
 public class SplashActivity extends Activity {
     @Override
@@ -26,7 +25,7 @@ public class SplashActivity extends Activity {
         animation.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(final Animation animation) {
-                FileUtils.createDirectory(getString(R.string.app_name));
+
             }
 
             @Override
