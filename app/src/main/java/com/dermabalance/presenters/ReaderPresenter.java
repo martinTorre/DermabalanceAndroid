@@ -1,5 +1,6 @@
 package com.dermabalance.presenters;
 
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.util.Log;
@@ -9,6 +10,7 @@ import com.dermabalance.R;
 import com.dermabalance.data.Product;
 import com.dermabalance.interfaces.Reader;
 import com.dermabalance.models.ReaderModel;
+import com.dermabalance.utils.FileUtils;
 
 import org.apache.poi.hssf.usermodel.HSSFDateUtil;
 import org.apache.poi.ss.usermodel.Cell;
@@ -61,8 +63,8 @@ public class ReaderPresenter implements Reader.Presenter {
     }
 
     @Override
-    public void readExcelData(final int type) {
-        new ReadFileTask(type).execute();
+    public void readExcelData(final int type, final Uri fileUri) {
+        new ReadFileTask(type, fileUri).execute();
     }
 
     @Override
@@ -120,16 +122,25 @@ public class ReaderPresenter implements Reader.Presenter {
 
         private int type;
 
-        public ReadFileTask(final int type) {
+        private Uri fileUri;
+
+        public ReadFileTask(final int type, final Uri fileUri) {
             this.type = type;
+            this.fileUri = fileUri;
         }
 
         @Override
         protected Boolean doInBackground(Void... voids) {
             products = new ArrayList<>();
 
-            String filePath = Environment.getExternalStorageDirectory()
-                    + File.separator + DermaApplication.getInstance().getString(R.string.app_name) + "/precios.xls";
+            String filePath = "";
+
+            if (fileUri == null) {
+                filePath = Environment.getExternalStorageDirectory()
+                        + File.separator + DermaApplication.getInstance().getString(R.string.app_name) + "/precios.xls";
+            } else {
+                filePath = FileUtils.getPath(fileUri);
+            }
 
             File inputFile = new File(filePath);
 
@@ -243,5 +254,4 @@ public class ReaderPresenter implements Reader.Presenter {
             view.showChanges(productsChanged);
         }
     }
-
 }

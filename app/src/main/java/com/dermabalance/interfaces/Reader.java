@@ -1,5 +1,7 @@
 package com.dermabalance.interfaces;
 
+import android.net.Uri;
+
 import com.dermabalance.data.Product;
 
 import java.util.List;
@@ -29,7 +31,7 @@ public interface Reader {
 
         void productsGot(List<Product> products);
 
-        void readExcelData(int type);
+        void readExcelData(int type, Uri filePathUri);
 
         void getProduct(String barcode);
 

@@ -22,6 +22,7 @@
     <string name="search_fields">Nombre</string>
 
     <string name="title_activity_products_changed">Nuevos precios</string>
+    <string name="add_file">Añadir archivos</string>
     <string name="calculate">Calcular</string>
     <string name="no_product_found">Sin resultados</string>
 </resources>

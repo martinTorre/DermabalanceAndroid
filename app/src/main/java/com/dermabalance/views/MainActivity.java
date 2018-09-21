@@ -1,6 +1,7 @@
 package com.dermabalance.views;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.DrawerLayout;
@@ -25,6 +26,9 @@ import com.dermabalance.utils.ProgressDialogUtils;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements Reader.View {
+
+    private static final int PICKFILE_RESULT_CODE = 200;
+
     private RecyclerView recyclerView;
 
     private RecyclerView.LayoutManager layoutManager;
@@ -107,11 +111,11 @@ public class MainActivity extends AppCompatActivity implements Reader.View {
             snackbar.show();
 
             ProgressDialogUtils.show(this);
-            presenter.readExcelData(ReaderPresenter.UPDATE);
+            presenter.readExcelData(ReaderPresenter.UPDATE, null);
 
         } else {
             textViewInfo.setVisibility(View.VISIBLE);
-            presenter.readExcelData(ReaderPresenter.INSERT);
+            presenter.readExcelData(ReaderPresenter.INSERT, null);
         }
     }
 
@@ -188,6 +192,19 @@ public class MainActivity extends AppCompatActivity implements Reader.View {
             } else if (resultCode == BarcodeScannerActivity.RESULT_ACCEPTED_PERMISSION) {
                 startActivityForResult(new Intent(this, BarcodeScannerActivity.class), BarcodeScannerActivity.REQUEST_CODE);
             }
+        } else {
+            if (resultCode == RESULT_OK) {
+                final Uri uri = data.getData();
+                ProgressDialogUtils.show(this);
+                presenter.readExcelData(ReaderPresenter.UPDATE, uri);
+            }
         }
+    }
+
+    public void addFile(final View view) {
+        Intent chooseFile = new Intent(Intent.ACTION_GET_CONTENT);
+        chooseFile.setType("*/*");
+        chooseFile = Intent.createChooser(chooseFile, "Choose a file");
+        startActivityForResult(chooseFile, PICKFILE_RESULT_CODE);
     }
 }
