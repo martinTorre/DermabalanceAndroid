@@ -8,16 +8,16 @@ public interface Changer {
 
     /**View interface.*/
     interface View {
-        void productsGot(List<Product> products);
+        void productsGot(List<Product> productsHigher, List<Product> productsLower);
 
-        void productUpdated(List<Product> products);
+        void productUpdated(List<Product> productsHigher, List<Product> productsLower);
     }
 
     /**Presenter interface.*/
     interface Presenter {
         void getProductsChanged();
 
-        void productsGot(List<Product> products, boolean wasUpdated);
+        void productsGot(List<Product> productsHigher, List<Product> productsLower, boolean wasUpdated);
 
         void updateProduct(Product product);
 

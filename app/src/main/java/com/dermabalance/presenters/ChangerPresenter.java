@@ -23,11 +23,12 @@ public class ChangerPresenter implements Changer.Presenter {
     }
 
     @Override
-    public void productsGot(final List<Product> products, final boolean wasUpdated) {
+    public void productsGot(final List<Product> productsHigher, final List<Product> productsLower,
+                            final boolean wasUpdated) {
         if (wasUpdated) {
-            view.productUpdated(products);
+            view.productUpdated(productsHigher, productsLower);
         } else {
-            view.productsGot(products);
+            view.productsGot(productsHigher, productsLower);
         }
     }
 

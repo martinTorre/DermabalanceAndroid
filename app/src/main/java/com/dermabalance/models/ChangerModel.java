@@ -35,7 +35,7 @@ public class ChangerModel implements Changer.Model {
 
     class GetProductsChangedTask extends AsyncTask<Void, Void, Void> {
 
-        private List<Product> products;
+        private List<Product> productsHigher, productsLower;
         private boolean wasUpdated;
 
         public GetProductsChangedTask(final boolean wasUpdated) {
@@ -44,13 +44,14 @@ public class ChangerModel implements Changer.Model {
 
         @Override
         protected Void doInBackground(Void... voids) {
-            products = productDao.getChanged();
+            productsHigher = productDao.getChangedPositive();
+            productsLower = productDao.getChangedNegative();
             return null;
         }
 
         @Override
         protected void onPostExecute(final Void result) {
-            presenter.productsGot(products, wasUpdated);
+            presenter.productsGot(productsHigher, productsLower, wasUpdated);
         }
     }
 

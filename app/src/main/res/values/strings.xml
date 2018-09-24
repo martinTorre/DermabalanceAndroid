@@ -25,4 +25,9 @@
     <string name="add_file">Añadir archivos</string>
     <string name="calculate">Calcular</string>
     <string name="no_product_found">Sin resultados</string>
+
+    <string name="higher">Más altos</string>
+    <string name="lower">Más bajos</string>
+
+    <string name="finish">Listo! :D</string>
 </resources>

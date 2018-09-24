@@ -10,6 +10,8 @@ import android.widget.TextView;
 import com.dermabalance.R;
 import com.dermabalance.data.Product;
 
+import java.util.List;
+
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
@@ -81,5 +83,4 @@ public class ProductFragment extends Fragment {
             textViewDifference.setText(product.getDifference() + "");
         }
     }
-
 }

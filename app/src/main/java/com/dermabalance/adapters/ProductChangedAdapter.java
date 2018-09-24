@@ -32,4 +32,9 @@ public class ProductChangedAdapter extends FragmentStatePagerAdapter {
     public int getCount() {
         return products != null ? products.size() : 0;
     }
+
+    public void update(final List<Product> products) {
+        this.products = products;
+        notifyDataSetChanged();
+    }
 }

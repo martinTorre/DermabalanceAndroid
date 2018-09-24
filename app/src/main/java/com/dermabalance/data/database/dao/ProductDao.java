@@ -26,6 +26,9 @@ public interface ProductDao {
     @Query("SELECT * FROM products WHERE description like:description")
     List<Product> getByDescriptionLike(String description);
 
-    @Query("SELECT * FROM products WHERE changed = 1")
-    List<Product> getChanged();
+    @Query("SELECT * FROM products WHERE changed = 1 and difference < 0 order by difference asc")
+    List<Product> getChangedNegative();
+
+    @Query("SELECT * FROM products WHERE changed = 1 and difference >= 0 order by difference desc")
+    List<Product> getChangedPositive();
 }
