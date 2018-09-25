@@ -5,12 +5,11 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.dermabalance.R;
 import com.dermabalance.data.Product;
-
-import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -26,6 +25,8 @@ public class ProductFragment extends Fragment {
     private Product product;
 
     private TextView textViewDescription, textViewBarcode, textViewLastPrice, textViewNewPrice, textViewDifference;
+
+    private Button btnCalculate;
 
     public ProductFragment() {
         // Required empty public constructor
@@ -72,6 +73,14 @@ public class ProductFragment extends Fragment {
         textViewLastPrice = view.findViewById(R.id.last_price);
         textViewNewPrice = view.findViewById(R.id.new_price);
         textViewDifference = view.findViewById(R.id.difference);
+        btnCalculate = view.findViewById(R.id.calculate);
+        btnCalculate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                CalculateDialogFragment dialog = CalculateDialogFragment.newInstance(product);
+                dialog.show(getFragmentManager(), "");
+            }
+        });
     }
 
     private void setData() {

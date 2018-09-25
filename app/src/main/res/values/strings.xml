@@ -28,6 +28,10 @@
 
     <string name="higher">Más altos</string>
     <string name="lower">Más bajos</string>
-
     <string name="finish">Listo! :D</string>
+
+    <string name="base_price">Precio base</string>
+    <string name="iva">Iva</string>
+    <string name="utility">Utilidad</string>
+    <string name="final_price">Precio final</string>
 </resources>
