@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.hardware.Camera;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -64,7 +65,8 @@ public class BarcodeScannerActivity extends Activity implements SurfaceHolder.Ca
      * @return true if already accepted
      */
     private boolean checkPermission() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
                 != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.CAMERA},

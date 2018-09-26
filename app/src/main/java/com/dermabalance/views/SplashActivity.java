@@ -57,13 +57,18 @@ public class SplashActivity extends Activity {
      */
     private void checkFilePermissions() {
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
-            int permissionCheck = this.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE);
+            int permissionCheck = 0;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                permissionCheck = this.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE);
+            }
             permissionCheck += this.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
             if (permissionCheck != 0) {
                 this.requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, 1001); //Any number
             } else {
                 showAnimation();
             }
+        } else {
+            showAnimation();
         }
     }
 }
