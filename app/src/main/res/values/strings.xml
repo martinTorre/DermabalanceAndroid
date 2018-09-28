@@ -34,4 +34,5 @@
     <string name="iva">Iva</string>
     <string name="utility">Utilidad</string>
     <string name="final_price">Precio final</string>
+    <string name="all_cleared">Listo!</string>
 </resources>

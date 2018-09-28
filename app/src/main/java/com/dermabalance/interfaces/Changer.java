@@ -11,6 +11,8 @@ public interface Changer {
         void productsGot(List<Product> productsHigher, List<Product> productsLower);
 
         void productUpdated(List<Product> productsHigher, List<Product> productsLower);
+
+        void allCleared();
     }
 
     /**Presenter interface.*/
@@ -22,6 +24,10 @@ public interface Changer {
         void updateProduct(Product product);
 
         void productUpdated();
+
+        void clearAll();
+
+        void allCleared();
     }
 
     /**Model interface.*/
@@ -29,5 +35,7 @@ public interface Changer {
         void getProductsChanged(boolean wasUpdated);
 
         void updateProduct(Product product);
+
+        void clearAll();
     }
 }

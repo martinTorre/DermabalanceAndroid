@@ -42,4 +42,14 @@ public class ChangerPresenter implements Changer.Presenter {
     public void productUpdated() {
         model.getProductsChanged(true);
     }
+
+    @Override
+    public void clearAll() {
+        model.clearAll();
+    }
+
+    @Override
+    public void allCleared() {
+        view.allCleared();
+    }
 }

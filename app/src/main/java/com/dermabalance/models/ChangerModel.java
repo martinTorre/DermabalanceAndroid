@@ -33,6 +33,11 @@ public class ChangerModel implements Changer.Model {
         new UpdateProductTask(product).execute();
     }
 
+    @Override
+    public void clearAll() {
+        new UpdateProductsTask().execute();
+    }
+
     class GetProductsChangedTask extends AsyncTask<Void, Void, Void> {
 
         private List<Product> productsHigher, productsLower;
@@ -72,6 +77,20 @@ public class ChangerModel implements Changer.Model {
         @Override
         protected void onPostExecute(final Void result) {
             presenter.productUpdated();
+        }
+    }
+
+    class UpdateProductsTask extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            productDao.clearAll();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(final Void result) {
+            presenter.allCleared();
         }
     }
 }

@@ -31,4 +31,7 @@ public interface ProductDao {
 
     @Query("SELECT * FROM products WHERE changed = 1 and difference >= 0 order by difference desc")
     List<Product> getChangedPositive();
+
+    @Query("UPDATE products set changed = 0 where changed = 1")
+    void clearAll();
 }

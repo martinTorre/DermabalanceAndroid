@@ -254,4 +254,16 @@ public class ProductsChangedActivity extends AppCompatActivity implements Change
         }
 
     }
+
+    @Override
+    public void allCleared() {
+        ProgressDialogUtils.dismiss();
+        Toast.makeText(this, getString(R.string.all_cleared), Toast.LENGTH_LONG).show();
+        finish();
+    }
+
+    public void clearAll(final View view) {
+        ProgressDialogUtils.show(this);
+        presenter.clearAll();
+    }
 }
