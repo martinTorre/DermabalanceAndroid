@@ -65,7 +65,7 @@ public class BarcodeScannerActivity extends Activity implements SurfaceHolder.Ca
      * @return true if already accepted
      */
     private boolean checkPermission() {
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1
                 && ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
                 != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this,

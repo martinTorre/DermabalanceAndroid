@@ -56,7 +56,7 @@ public class SplashActivity extends Activity {
      * Check and request permissions.
      */
     private void checkFilePermissions() {
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1) {
             int permissionCheck = 0;
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
                 permissionCheck = this.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE);
