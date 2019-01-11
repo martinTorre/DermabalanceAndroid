@@ -95,8 +95,8 @@ public class CalculateDialogFragment extends DialogFragment {
     }
 
     private void calculate() {
-        double total = basePrice
-                + (switchIva.isChecked() ? (basePrice * IVA) : 0);
+        double total = FormatUtils.get2Decimals(basePrice
+                + (switchIva.isChecked() ? (basePrice * IVA) : 0));
 
         textViewCalculated.setText(total + "");
     }
