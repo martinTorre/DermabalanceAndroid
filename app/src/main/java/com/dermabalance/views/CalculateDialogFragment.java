@@ -15,18 +15,19 @@ import android.widget.TextView;
 import com.dermabalance.R;
 import com.dermabalance.data.Product;
 import com.dermabalance.utils.ConvertUtils;
+import com.dermabalance.utils.FormatUtils;
 
 public class CalculateDialogFragment extends DialogFragment {
 
     private static final String ARG_PARAM_PROD = "arg_param_prod";
 
     private TextView textViewFinal, textViewCalculated;
-    private EditText editTextBase, editTextUtility;
+    private EditText editTextBase;
     private SwitchCompat switchIva;
 
     private Product product;
 
-    private double basePrice, utility;
+    private double basePrice;
     private static final double IVA = 0.16;
 
     public static CalculateDialogFragment newInstance(final Product product) {
@@ -51,11 +52,11 @@ public class CalculateDialogFragment extends DialogFragment {
         textViewFinal = v.findViewById(R.id.textView_final);
         textViewCalculated = v.findViewById(R.id.textView_calculated);
         editTextBase = v.findViewById(R.id.editText_base);
-        editTextUtility = v.findViewById(R.id.editText_utility);
         switchIva = v.findViewById(R.id.iva);
 
         setData();
         setListeners();
+        setBasePrice();
 
         return v;
     }
@@ -85,24 +86,6 @@ public class CalculateDialogFragment extends DialogFragment {
             }
         });
 
-        editTextUtility.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                utility = ConvertUtils.getDouble(s.toString());
-                calculate();
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
         switchIva.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -115,8 +98,12 @@ public class CalculateDialogFragment extends DialogFragment {
         double total = basePrice
                 + (switchIva.isChecked() ? (basePrice * IVA) : 0);
 
-        total = total + (total * (utility / 100));
-
         textViewCalculated.setText(total + "");
+    }
+
+    private void setBasePrice() {
+        switchIva.setChecked(true);
+        final double newBase = FormatUtils.get2Decimals(product.getPrice() / (1 + IVA));
+        editTextBase.setText("" + newBase);
     }
 }

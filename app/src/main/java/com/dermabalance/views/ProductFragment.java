@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.dermabalance.R;
 import com.dermabalance.data.Product;
+import com.dermabalance.utils.FormatUtils;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -89,7 +90,7 @@ public class ProductFragment extends Fragment {
             textViewBarcode.setText(product.getBarcode() + "");
             textViewLastPrice.setText(product.getLastPrice() + "");
             textViewNewPrice.setText(product.getPrice() + "");
-            textViewDifference.setText(product.getDifference() + "");
+            textViewDifference.setText(FormatUtils.get2Decimals(product.getDifference()) + "");
         }
     }
 }
