@@ -6,8 +6,8 @@ android {
         applicationId "com.dermabalance"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 3
-        versionName "1.0.6"
+        versionCode 10
+        versionName "1.1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
@@ -17,6 +17,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
+    buildToolsVersion = '29.0.2'
 }
 
 dependencies {

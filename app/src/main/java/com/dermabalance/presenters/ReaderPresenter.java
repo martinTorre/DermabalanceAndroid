@@ -139,7 +139,7 @@ public class ReaderPresenter implements Reader.Presenter {
                 filePath = Environment.getExternalStorageDirectory()
                         + File.separator + DermaApplication.getInstance().getString(R.string.app_name) + "/precios.xls";
             } else {
-                filePath = FileUtils.getPath(fileUri);
+                filePath = FileUtils.getPath(DermaApplication.getInstance().getBaseContext(), fileUri);
             }
 
             File inputFile = new File(filePath);
