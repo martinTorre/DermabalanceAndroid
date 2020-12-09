@@ -332,12 +332,13 @@ public class FileUtils {
 
                 String[] contentUriPrefixesToTry = new String[]{
                         "content://downloads/public_downloads",
-                        "content://downloads/my_downloads"
+                        "content://downloads/my_downloads",
+                        "content://downloads/all_downloads"
                 };
 
                 for (String contentUriPrefix : contentUriPrefixesToTry) {
-                    Uri contentUri = ContentUris.withAppendedId(Uri.parse(contentUriPrefix), Long.valueOf(id));
                     try {
+                        Uri contentUri = ContentUris.withAppendedId(Uri.parse(contentUriPrefix), Long.valueOf(id));
                         String path = getDataColumn(context, contentUri, null, null);
                         if (path != null) {
                             return path;

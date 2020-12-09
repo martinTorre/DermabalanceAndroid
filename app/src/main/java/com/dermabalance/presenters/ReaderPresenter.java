@@ -13,6 +13,8 @@ import com.dermabalance.models.ReaderModel;
 import com.dermabalance.utils.FileUtils;
 
 import org.apache.poi.hssf.usermodel.HSSFDateUtil;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellValue;
 import org.apache.poi.ss.usermodel.FormulaEvaluator;
@@ -146,49 +148,74 @@ public class ReaderPresenter implements Reader.Presenter {
 
             try {
                 final InputStream inputStream = new FileInputStream(inputFile);
-                final XSSFWorkbook workbook = new XSSFWorkbook(inputStream);
-                final XSSFSheet sheet = workbook.getSheetAt(0);
-                final int rowsCount = sheet.getPhysicalNumberOfRows();
-                final FormulaEvaluator formulaEvaluator = workbook.getCreationHelper().createFormulaEvaluator();
 
-                for (int r = 2; r < rowsCount; r++) {
-                    Row row = sheet.getRow(r);
-                    int cellsCount = row.getPhysicalNumberOfCells();
-                    //inner loop, loops through columns
-                    String linea = "";
-                    String barcode = "";
-                    String descripcion = "";
-                    String price = "";
-                    for (int c = 0; c < cellsCount; c++) {
-                        String value = getCellAsString(row, c, formulaEvaluator);
-                        switch (c) {
-                            case 0:
-                                linea = value;
-                                break;
-                            case 1:
-                                barcode = value;
-                                break;
-                            case 2:
-                                descripcion = value;
-                                break;
-                            case 3:
-                                price = value;
-                                break;
-                        }
-                    }
-                    final Product product = new Product(linea, barcode, descripcion, price, 0);
-                    if (products != null) {
-                        products.add(product);
-                    }
+                int rowsCount = 0;
+                FormulaEvaluator formulaEvaluator;
+                XSSFSheet sheet = null;
+                HSSFSheet sheetOld = null;
+
+                try {
+                    final XSSFWorkbook workbook = new XSSFWorkbook(inputStream);
+                    sheet = workbook.getSheetAt(0);
+                    rowsCount = sheet.getPhysicalNumberOfRows();
+                    formulaEvaluator = workbook.getCreationHelper().createFormulaEvaluator();
+
+                    return readDoc(rowsCount, sheet, null, formulaEvaluator);
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
 
-                return true;
+                final HSSFWorkbook workbookOld = new HSSFWorkbook(new FileInputStream(inputFile));
+                sheetOld = workbookOld.getSheetAt(0);
+                rowsCount = sheetOld.getPhysicalNumberOfRows();
+                formulaEvaluator = workbookOld.getCreationHelper().createFormulaEvaluator();
+
+                return readDoc(rowsCount, null, sheetOld, formulaEvaluator);
 
             } catch (final Exception e) {
                 e.printStackTrace();
             }
 
             return false;
+        }
+        private boolean readDoc(int rowsCount, XSSFSheet sheet, HSSFSheet sheetOld, FormulaEvaluator formulaEvaluator) {
+            for (int r = 2; r < rowsCount; r++) {
+                Row row = null;
+                if (sheet != null) {
+                    row = sheet.getRow(r);
+                } else {
+                    row = sheetOld.getRow(r);
+                }
+                int cellsCount = row.getPhysicalNumberOfCells();
+                //inner loop, loops through columns
+                String linea = "";
+                String barcode = "";
+                String descripcion = "";
+                String price = "";
+                for (int c = 0; c < cellsCount; c++) {
+                    String value = getCellAsString(row, c, formulaEvaluator);
+                    switch (c) {
+                        case 0:
+                            linea = value;
+                            break;
+                        case 1:
+                            barcode = value;
+                            break;
+                        case 2:
+                            descripcion = value;
+                            break;
+                        case 3:
+                            price = value;
+                            break;
+                    }
+                }
+                final Product product = new Product(linea, barcode, descripcion, price, 0);
+                if (products != null) {
+                    products.add(product);
+                }
+            }
+
+            return true;
         }
 
         @Override
