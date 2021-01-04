@@ -23,6 +23,8 @@
 
     <string name="title_activity_products_changed">Nuevos precios</string>
     <string name="add_file">Añadir archivos</string>
+    <string name="delete_data">Eliminar datos</string>
+    <string name="delete_data_confirmation">Quieres borrar los datos?</string>
     <string name="calculate">Calcular</string>
     <string name="no_product_found">Sin resultados</string>
 
@@ -35,4 +37,7 @@
     <string name="utility">Utilidad</string>
     <string name="final_price">Precio final</string>
     <string name="all_cleared">Listo!</string>
+
+    <string name="yes">Sí</string>
+    <string name="no">No</string>
 </resources>

@@ -107,6 +107,15 @@
             android:textStyle="bold"
             android:onClick="addFile"/>
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="@string/delete_data"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:onClick="deleteData"/>
+
     </LinearLayout>
 
 </android.support.v4.widget.DrawerLayout>

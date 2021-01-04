@@ -19,6 +19,8 @@ public interface Reader {
         void productsLikeGot(List<Product> products);
 
         void productGot(Product product);
+
+        void dataDeleted();
     }
 
     /**Presenter interface.*/
@@ -36,6 +38,10 @@ public interface Reader {
         void getProduct(String barcode);
 
         void productGot(Product product);
+
+        void deleteData();
+
+        void dataDeleted();
     }
 
     /**Model interface.*/
@@ -53,5 +59,7 @@ public interface Reader {
         void getProductsLike(String barcode);
 
         void getProductByBarcode(String barcode);
+
+        void deleteData();
     }
 }

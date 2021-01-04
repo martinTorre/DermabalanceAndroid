@@ -58,6 +58,11 @@ public class ReaderModel implements Reader.Model {
         new GetProductByBarcodeTask(barcode).execute();
     }
 
+    @Override
+    public void deleteData() {
+        new DeleteAllProductsTask().execute();
+    }
+
     class GetProductsLikeTask extends AsyncTask<Void, Void, Void> {
 
         private String barcode;
@@ -136,6 +141,20 @@ public class ReaderModel implements Reader.Model {
         @Override
         protected void onPostExecute(Void result) {
             presenter.productGot(product);
+        }
+    }
+
+    class DeleteAllProductsTask extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            productDao.deleteAll();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            presenter.dataDeleted();
         }
     }
 }

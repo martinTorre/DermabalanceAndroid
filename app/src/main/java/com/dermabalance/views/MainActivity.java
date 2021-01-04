@@ -143,9 +143,7 @@ public class MainActivity extends AppCompatActivity implements Reader.View {
     }
 
     @Override
-    public void productsLikeGot(final List<Product> products) {
-
-    }
+    public void productsLikeGot(final List<Product> products) { }
 
     @Override
     public void productGot(final Product product) {
@@ -157,6 +155,15 @@ public class MainActivity extends AppCompatActivity implements Reader.View {
                     .make(recyclerView, getString(R.string.no_product_found), Snackbar.LENGTH_LONG);
             snackbar.show();
         }
+    }
+
+    @Override
+    public void dataDeleted() {
+        ProgressDialogUtils.dismiss();
+        if (adapter != null) {
+            adapter.dataDeleted();
+        }
+        drawerLayout.closeDrawer(Gravity.LEFT);
     }
 
     @Override
@@ -178,6 +185,22 @@ public class MainActivity extends AppCompatActivity implements Reader.View {
 
     public void scan(final View view) {
         startActivityForResult(new Intent(this, BarcodeScannerActivity.class), BarcodeScannerActivity.REQUEST_CODE);
+    }
+
+    public void addFile(final View view) {
+        Intent chooseFile = new Intent(Intent.ACTION_GET_CONTENT);
+        chooseFile.setType("*/*");
+        chooseFile = Intent.createChooser(chooseFile, "Choose a file");
+        startActivityForResult(chooseFile, PICKFILE_RESULT_CODE);
+    }
+
+    public void deleteData(final View view) {
+        DeleteDataDialogFragment.newInstance().show(getSupportFragmentManager(), "");
+    }
+
+    public void deleteDataConfirmed() {
+        ProgressDialogUtils.show(this);
+        presenter.deleteData();
     }
 
     @Override
@@ -202,12 +225,5 @@ public class MainActivity extends AppCompatActivity implements Reader.View {
                 presenter.readExcelData(isThereProducts ? ReaderPresenter.UPDATE : ReaderPresenter.INSERT, uri);
             }
         }
-    }
-
-    public void addFile(final View view) {
-        Intent chooseFile = new Intent(Intent.ACTION_GET_CONTENT);
-        chooseFile.setType("*/*");
-        chooseFile = Intent.createChooser(chooseFile, "Choose a file");
-        startActivityForResult(chooseFile, PICKFILE_RESULT_CODE);
     }
 }

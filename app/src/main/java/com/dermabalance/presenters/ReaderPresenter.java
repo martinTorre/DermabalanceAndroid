@@ -79,6 +79,16 @@ public class ReaderPresenter implements Reader.Presenter {
         view.productGot(product);
     }
 
+    @Override
+    public void deleteData() {
+        model.deleteData();
+    }
+
+    @Override
+    public void dataDeleted() {
+        view.dataDeleted();
+    }
+
     /**
      * Returns the cell as a string from the excel file
      * @param row

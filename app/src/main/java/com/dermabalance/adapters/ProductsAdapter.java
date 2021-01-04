@@ -16,6 +16,7 @@ import com.dermabalance.interfaces.Reader;
 import com.dermabalance.presenters.ReaderPresenter;
 import com.dermabalance.views.ProductsChangedActivity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHolder> implements Filterable, Reader.View{
@@ -133,6 +134,12 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
     @Override
     public void productGot(Product product) {
 
+    }
+
+    @Override
+    public void dataDeleted() {
+        this.productList = new ArrayList<>();
+        notifyDataSetChanged();
     }
 
     /**
