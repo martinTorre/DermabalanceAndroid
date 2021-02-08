@@ -260,17 +260,18 @@ public class ReaderPresenter implements Reader.Presenter {
                 final double newPrice = product.getPrice();
                 if (productDb != null) {
                     final double initialPrice = productDb.getPrice();
-                    double difference = 0;
+                    double difference;
                     if (newPrice > initialPrice) {
                         difference = newPrice - initialPrice;
                     } else {
                         difference = initialPrice - newPrice;
                     }
 
-                    if (difference > 1) {
-                        product.setPrice(newPrice);
+                    if (difference > 1 && initialPrice > 0 && newPrice > 0) {
+                        double newPriceRounded = getNewPrice(newPrice);
+                        product.setPrice(newPriceRounded);
                         product.setLastPrice(initialPrice);
-                        product.setDifference(newPrice - initialPrice);
+                        product.setDifference(newPriceRounded - initialPrice);
                         product.setChanged(1);
                         productsChanged.add(product);
                         model.update(product);
@@ -289,5 +290,10 @@ public class ReaderPresenter implements Reader.Presenter {
         protected void onPostExecute(Void result) {
             view.showChanges(productsChanged);
         }
+    }
+
+    private double getNewPrice(double newPrice) {
+        int newPriceRounded = (int) Math.round(newPrice);
+        return (double) newPriceRounded;
     }
 }
